@@ -1,5 +1,7 @@
 class ConversationsController < ApplicationController
   before_action :logged_in
+  load_and_authorize_resource
+
 
   def index
    @users = User.all

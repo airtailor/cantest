@@ -1,4 +1,5 @@
 class Message < ApplicationRecord
+  resourcify
   belongs_to :conversation
   belongs_to :user
 

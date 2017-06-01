@@ -8,9 +8,21 @@ class Ability
 
     if user.has_role? :admin
       can :manage, :all
+
     elsif user.has_role? :tailor
-      can :read, Conversation, (sender_id: user.id || recipient_id: user.id)
-      can :create_read_update, Order
+
+      can :read, Conversation do |convo|
+        (convo.sender_id == user.id || convo.recipient_id == user.id)
+      end
+      cannot :create, Conversation
+
+      can :read, Message
+      cannot :create, Message
+
+    elsif user.has_role? :hq
+      can :create, Message do |message|
+        message.conversation.recipient.has_role? :tailor
+      end
     else
       # no abilities by default
     end
